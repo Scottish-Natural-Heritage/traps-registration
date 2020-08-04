@@ -5,7 +5,8 @@ on:
     branches: [ main, develop ]
 
 env:
-  AWS_REGION: eu-west-1
+  ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+  ECR_REPOSITORY: naturescot/trap-registration
   TR_PORT: 3000
   TR_PATH_PREFIX: trap-registration
   TR_SESSION_SECRET: override_this_value
@@ -31,20 +32,14 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      uses: aws-actions/amazon-ecr-login@v1
+      run: $(aws ecr get-login --no-include-email --region eu-west-2)
 
     - name: Build and tag the Docker Image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: naturescot/trap-registration
       run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_SHA} .
 
     - name: Push the Docker Image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: naturescot/trap-registration
       run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_SHA}
 
     - name: Logout of Amazon ECR
       if: always()
-      run: docker logout ${{ steps.login-ecr.outputs.registry }}
+      run: docker logout $ECR_REGISTRY
