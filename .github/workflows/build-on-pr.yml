@@ -1,4 +1,4 @@
-name: Build on PRs
+name: Build and Push on PRs
 
 on:
   pull_request:
@@ -25,5 +25,29 @@ jobs:
     - name: Check the pre-start operations
       run: npm run prestart
 
-    - name: Build the Docker Image
-      run: docker build --tag naturescot/trap-registration:${GITHUB_SHA} .
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and tag the Docker Image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: naturescot/trap-registration
+      run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_SHA} .
+
+    - name: Push the Docker Image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: naturescot/trap-registration
+      run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_SHA}
+
+    - name: Logout of Amazon ECR
+      if: always()
+      run: docker logout ${{ steps.login-ecr.outputs.registry }}
