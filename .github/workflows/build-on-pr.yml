@@ -5,7 +5,7 @@ on:
     branches: [ main, develop ]
 
 env:
-  AWS_DEFAULT_REGION: eu-west-1
+  AWS_REGION: eu-west-1
   TR_PORT: 3000
   TR_PATH_PREFIX: trap-registration
   TR_SESSION_SECRET: override_this_value
