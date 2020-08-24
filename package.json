@@ -14,7 +14,10 @@
     "build": "npm run scss && npm run assets",
     "prestart": "npm run build",
     "start": "node --experimental-modules src/server.js",
-    "dev": "nodemon --exec \"npm run lint && npm run start\" -e js,njk,scss --ignore dist/"
+    "dev": "CSP_PORT=3999 nodemon --exec \"npm run lint && npm run start\" -e js,njk,scss --ignore dist/ --ignore cypress/",
+    "cy:run": "cypress run",
+    "test": "CSP_PORT=3000 CSP_PATH_PREFIX=trap-registration start-server-and-test start http://localhost:3000/trap-registration/health cy:run",
+    "cy:open": "cypress open"
   },
   "engines": {
     "node": "12.14.1",
