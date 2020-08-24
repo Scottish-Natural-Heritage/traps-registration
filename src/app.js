@@ -74,6 +74,12 @@ app.use(
   express.static(path.join(__dirname, '..', '/node_modules/govuk-frontend/govuk'))
 );
 
+// `health` is a simple health-check end-point to test whether the service is
+// up.
+app.get(`${config.pathPrefix}/health`, async (request, response) => {
+  response.status(200).send({message: 'OK'});
+});
+
 app.all(`${config.pathPrefix}/`, (request, response) => {
   response.redirect(`${config.pathPrefix}/start`);
 });
