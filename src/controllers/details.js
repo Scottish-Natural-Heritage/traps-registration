@@ -1,5 +1,7 @@
 import {ReturnState} from './_base.js';
 
+import utils from 'naturescot-utils';
+
 /**
  * Clean the incoming POST request body to make it more compatible with the
  * database and its validation rules.
@@ -19,7 +21,10 @@ const cleanInput = (body) => {
     addressCounty: body.addressCounty === undefined ? undefined : body.addressCounty.trim(),
     addressPostcode: body.addressPostcode === undefined ? undefined : body.addressPostcode.trim(),
     phoneNumber: body.phoneNumber === undefined ? undefined : body.phoneNumber.trim(),
-    emailAddress: body.emailAddress === undefined ? undefined : body.emailAddress.trim()
+    emailAddress:
+      body.emailAddress === undefined
+        ? undefined
+        : utils.formatters.stripAndRemoveObscureWhitespace(body.emailAddress.toLowerCase())
   };
 };
 
@@ -80,13 +85,14 @@ const detailsController = (request) => {
     request.session.phoneError = true;
   }
 
-  if (
-    request.body.emailAddress === undefined ||
-    request.body.emailAddress.trim() === '' ||
-    request.body.emailAddress.trim().includes(' ') ||
-    !request.body.emailAddress.includes('@')
-  ) {
+  if (request.body.emailAddress === undefined) {
     request.session.emailError = true;
+  } else {
+    try {
+      utils.recipients.validateEmailAddress(request.body.emailAddress);
+    } catch {
+      request.session.emailError = true;
+    }
   }
 
   // Check that any of the fields are invalid.
