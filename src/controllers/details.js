@@ -63,16 +63,11 @@ const detailsController = (request) => {
     request.session.townError = true;
   }
 
-  // The shortest UK postcode is 'N19GU'.
-  // The longest should be something like 'IV30 6GR', but we're not going to
-  // check for too much data at this time.
-  if (
-    request.body.addressPostcode === undefined ||
-    request.body.addressPostcode.trim() === '' ||
-    request.body.addressPostcode.trim().length < 5
-  ) {
-    request.session.postcodeError = true;
-  }
+  // Call natureScot utils to check validity of postcode
+  request.session.postcodeError =
+    request.body.addressPostcode === undefined
+      ? true
+      : !utils.postalAddress.isaRealUkPostcode(request.body.addressPostcode);
 
   // The smallest, non-local, non-shortcode UK phone number is '08001111'.
   // The longest could be something like 	'+44 (01234) 567 890', but we're not

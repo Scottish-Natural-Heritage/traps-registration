@@ -52,7 +52,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:prerelease
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:prerelease .
 
     - name: Push the Docker Image to Amazon ECR
       env:
