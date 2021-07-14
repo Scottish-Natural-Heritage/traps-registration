@@ -35,16 +35,15 @@
   <p class="govuk-body">
         We will contact you by email 3 months before your registration expires to remind you to register again.
   </p>
-  {% if model.meatBait === false %}
-    <p class="govuk-body">
-      If you wish to change any details on your registration, including to start using meat bait returns, or no longer require this registration you must inform us by email.
-      You must also inform us if you are convicted of a wildlife crime.
-    </p>
-  {% endif %}
   {% if model.meatBait %}
     <p class="govuk-body">
       If you no longer require this registration or are convicted of a wildlife
       crime you must inform us by email.
+    </p>
+  {% else %}
+    <p class="govuk-body">
+      If you wish to change any details on your registration, including to start using meat bait returns, or no longer require this registration you must inform us by email.
+      You must also inform us if you are convicted of a wildlife crime.
     </p>
   {% endif %}
   <p class="govuk-body">
