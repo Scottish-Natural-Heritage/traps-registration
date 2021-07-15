@@ -17,12 +17,11 @@
   <h2 class="govuk-heading-m">What happens next</h2>
 
   <p class="govuk-body">
-    You must understand and comply with the terms and conditions attached to the
-    General Licences.
+    You must understand and comply with the terms and conditions attached to the General Licences.
   </p>
 
   {% if model.meatBait %}
-    <p class="govuk-body">We will ask you every year what non-target species you have caught using this <a href="https://www.nature.scot/licence-return-form-meat-bait">return form</a>.</p>
+    <p class="govuk-body">We will ask you every year what non-target species you have caught.</p>
     <p class="govuk-body">Please make sure you keep a record of:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>what non-target species are caught</li>
@@ -30,16 +29,23 @@
       <li>how many of each non-target species are trapped</li>
       <li>the trap type used</li>
     </ul>
-    <p class="govuk-body">Please submit this information, even if you have not caught anything, within one month of the expiry of the General Licence, on or before 31st January.</p>
+    <p class="govuk-body">Please submit this information even if you have not caught anything. This should be submitted within one month of the expiry of the General Licence, on or before 31st January. Please use this online form to submit your meat bait return - <a href="https://licensing.nature.scot/trap-registration-return/start">https://licensing.nature.scot/trap-registration-return/start</a>.</p>
   {% endif %}
 
   <p class="govuk-body">
         We will contact you by email 3 months before your registration expires to remind you to register again.
-      </p>
-  <p class="govuk-body">
-    If you no longer require this registration or are convicted of a wildlife
-    crime you must inform us by email.
   </p>
+  {% if model.meatBait %}
+    <p class="govuk-body">
+      If you no longer require this registration or are convicted of a wildlife
+      crime you must inform us by email.
+    </p>
+  {% else %}
+    <p class="govuk-body">
+      If you wish to change any details on your registration, including to start using meat bait returns, or no longer require this registration you must inform us by email.
+      You must also inform us if you are convicted of a wildlife crime.
+    </p>
+  {% endif %}
   <p class="govuk-body">
           Email:<br>
     <strong class="govuk-!-font-weight-bold">
